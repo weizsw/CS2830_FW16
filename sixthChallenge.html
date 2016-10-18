@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<!-- Shaowei Zhou
+14215493
+9/40/2016 -->
+
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <meta charset="utf-8">
+		<title>sixthChallenge</title>
+		
+		<style>
+
+			* {
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}
+
+			#columnsWrapper {
+				display: flex;
+				flex-flow: row wrap;
+				height: 1000px;
+            }
+			
+            .middleRow {
+				flex: 30%;
+				box-sizing: border-box;   
+			}
+			.middleRow2 {
+				flex: 65%;
+				box-sizing: border-box;  
+				margin-left: 20px;
+			}
+         
+          	
+          	#css, #html {
+          		width: 100%;
+          		height: 49.85%;
+          	}
+
+          	#preview {
+          		border: dotted;
+          	}
+
+          	#button {
+          		flex: 33%;
+          		box-sizing: border-box;
+          		
+          		height: 50px;
+
+          	}
+          	.empty {
+          		flex: 65%;
+          		margin-left: 20px;
+          		box-sizing: border-box;  
+          	}
+          	.button {
+          		width: 31%;
+          		box-sizing: border-box;  
+          	}
+           
+		</style>
+		<style id='user-style'>
+           
+        </style>
+
+        <script type="text/javascript">
+			var is_toggled = false;
+
+			function preview() {
+				var textArea = document.getElementById('html');
+				var div = document.getElementById('preview');
+				var text = textArea.value;
+				div.innerHTML = text;
+			}
+
+			function cleartext() {
+				if(confirm("Clear Everything?")) {
+					document.getElementById('form1').reset();
+					var div = document.getElementById('preview');
+					div.innerHTML = '';
+				}
+			}
+
+			function css_regex() {
+                var css_pattern = /(.*\{(.|\n)*?\})*/gm;
+                var arrMatch = null;
+                var strMatch = "";
+                arrMatch = $('#css').val().match(css_pattern);
+                var x;
+                for (x in arrMatch) {
+                    if (arrMatch[x] != "") {
+                        strMatch = strMatch + "\n#preview " + arrMatch[x];
+                    }
+                }
+                $('#user-style').html(strMatch);
+            }
+
+            function toggle_btn_click() {
+                $('#cssbtn').click(function() {
+                    if (is_toggled == false) {
+                        
+                        css_regex();
+                        is_toggled = true;
+                        
+                    } else {
+                        $('#user-style').html('');
+                        is_toggled = false;
+                    }
+                });
+            }
+
+            function tabsInEditor() {
+                $('.editor').keydown(function(e) {
+                    if(e.which == 9) {
+                        e.preventDefault();
+                        var cursorPos = this.selectionStart;
+                        console.log(e);
+                        console.log(this.selectionStart);
+                        $(this).val($(this).val().substring(0, cursorPos) + "    " + $(this).val().substring(cursorPos));
+                        this.setSelectionRange(cursorPos + 4, cursorPos + 4);
+                    }
+                });
+            }
+
+             $(document).ready(function() {
+                console.log("Ready!");
+                toggle_btn_click();
+                tabsInEditor();
+               
+            });
+
+		</script>
+	</head>
+	<body>
+		<form action="#" method="POST" id="form1">
+			<div id="columnsWrapper">
+				
+	            <div class="middleRow">
+	            	
+	            	<textarea id="css" name="css" class="editor" placeholder="CSS..."></textarea>
+	            	<br>
+	            	<textarea id="html" name="html" class="editor" placeholder="HTML..."></textarea>
+	            	
+	            </div>
+	            <div class="middleRow2" id="preview"></div>
+				<div id="button">
+					<br>
+	            	<button type="button" class="button" onclick="preview()">Launch</button>
+	            	<button type="button" class="button" onclick="cleartext()" >Clear</button>
+	            	<button id="cssbtn" type="button" class="button">Toggle</button>
+	            </div>
+	            <div class="empty">
+	            	
+	            </div>
+			</div>
+		</form>
+	</body>
+</html>
